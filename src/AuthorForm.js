@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { addAuthor } from './helpers/data/authorData';
+import { addAuthor, updateAuthor } from './helpers/data/authorData';
 
-const AuthorForm = ({ formTitle, setAuthors }) => {
+const AuthorForm = ({
+  formTitle,
+  setAuthors,
+  firstName,
+  lastName,
+  email,
+  firebaseKey
+}) => {
   const [author, setAuthor] = useState({
-    firstName: '',
-    lastName: '',
-    email: ''
+    firstName: firstName || '',
+    lastName: lastName || '',
+    email: email || '',
+    firebaseKey: firebaseKey || null
   });
 
   const handleInputChange = (e) => {
@@ -18,7 +26,11 @@ const AuthorForm = ({ formTitle, setAuthors }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addAuthor(author).then((authorArray) => setAuthors(authorArray));
+    if (author.firebaseKey) {
+      updateAuthor(author).then((authorArray) => setAuthors(authorArray));
+    } else {
+      addAuthor(author).then((authorArray) => setAuthors(authorArray));
+    }
   };
 
   return (
@@ -35,7 +47,7 @@ const AuthorForm = ({ formTitle, setAuthors }) => {
             name='firstName'
             type='text'
             placeholder='First Name'
-            value={author.firstName.value}
+            value={author.firstName}
             onChange={handleInputChange}>
           </input>
           <label>Last Name: </label>
@@ -43,7 +55,7 @@ const AuthorForm = ({ formTitle, setAuthors }) => {
             name='lastName'
             type='text'
             placeholder=''
-            value={author.lastName.value}
+            value={author.lastName}
             onChange={handleInputChange}>
           </input>
           <label>Email: </label>
@@ -51,7 +63,7 @@ const AuthorForm = ({ formTitle, setAuthors }) => {
             name='email'
             type='email'
             placeholder='Email'
-            value={author.email.value}
+            value={author.email}
             onChange={handleInputChange}>
           </input>
           <button type='submit'>Submit</button>
@@ -63,7 +75,11 @@ const AuthorForm = ({ formTitle, setAuthors }) => {
 
 AuthorForm.propTypes = {
   formTitle: PropTypes.string.isRequired,
-  setAuthors: PropTypes.func
+  setAuthors: PropTypes.func,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  email: PropTypes.string,
+  firebaseKey: PropTypes.string
 };
 
 export default AuthorForm;
