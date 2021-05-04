@@ -54,7 +54,7 @@ const AuthorForm = ({
           <input
             name='lastName'
             type='text'
-            placeholder=''
+            placeholder='Last Name'
             value={author.lastName}
             onChange={handleInputChange}>
           </input>
